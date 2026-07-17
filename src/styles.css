@@ -1,0 +1,373 @@
+@import "tailwindcss" source(none);
+@source "../src";
+
+/*
+ * Hub — design tokens (§5 da spec).
+ *
+ * Duas cores: navy e ouro. Cinza é derivado do navy.
+ * Ouro NUNCA é texto sobre branco. Texto "dourado" claro usa --gold-ink.
+ * Zero gradiente. Elevação é borda, não sombra.
+ */
+
+@theme inline {
+  /* ------- cores ------- */
+  --color-navy: var(--navy);
+  --color-navy-2: var(--navy-2);
+  --color-navy-3: var(--navy-3);
+  --color-navy-4: var(--navy-4);
+  --color-navy-5: var(--navy-5);
+
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-canvas: var(--canvas);
+  --color-raise: var(--raise);
+
+  --color-gold: var(--gold);
+  --color-gold-hover: var(--gold-hover);
+  --color-gold-wash: var(--gold-wash);
+  --color-gold-ink: var(--gold-ink);
+
+  --color-danger: var(--danger);
+  --color-danger-wash: var(--danger-wash);
+
+  /* aliases neutros só para satisfazer shadcn-like defaults se algum resquício existir */
+  --color-background: var(--canvas);
+  --color-foreground: var(--ink);
+  --color-border: var(--line);
+  --color-ring: var(--gold);
+
+  /* ------- tipografia ------- */
+  --font-sans: "Geist", "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+
+  --text-meta: 11px;
+  --text-meta--line-height: 14px;
+  --text-meta--letter-spacing: 0.04em;
+
+  --text-caption: 12px;
+  --text-caption--line-height: 16px;
+
+  --text-body-sm: 13px;
+  --text-body-sm--line-height: 18px;
+
+  --text-body: 14px;
+  --text-body--line-height: 20px;
+
+  --text-title: 20px;
+  --text-title--line-height: 26px;
+  --text-title--letter-spacing: -0.02em;
+
+  --text-display: 34px;
+  --text-display--line-height: 40px;
+
+  /* ------- radius ------- */
+  --radius-control: 6px;
+  --radius-card: 10px;
+
+  /* ------- durações e easings ------- */
+  --ease-out-hub: cubic-bezier(0.2, 0, 0, 1);
+  --ease-drag: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+:root {
+  --navy: #0D1527;
+  --navy-2: #161F33;
+  --navy-3: #1F2940;
+  --navy-4: #2A3450;
+  --navy-5: #3A4560;
+
+  --ink: #0D1527;
+  --ink-muted: #4A5468;
+  --ink-faint: #8892A4;
+
+  --line: #E3E6EC;
+  --line-strong: #C9CFDA;
+
+  --canvas: #FFFFFF;
+  --raise: #F7F8FA;
+
+  --gold: #EAB409;
+  --gold-hover: #D4A208;
+  --gold-wash: #FEF7E0;
+  --gold-ink: #6B5203;
+
+  --danger: #B3261E;
+  --danger-wash: #FDECEA;
+
+  --shadow-float: 0 8px 24px rgba(13, 21, 39, 0.10), 0 2px 6px rgba(13, 21, 39, 0.06);
+
+  --dur-fast: 120ms;
+  --dur-base: 160ms;
+  --dur-slow: 240ms;
+}
+
+.dark {
+  --canvas: #0D1527;
+  --raise: #161F33;
+
+  --ink: #F2F4F8;
+  --ink-muted: #A8B0C0;
+  --ink-faint: #6C7690;
+
+  --line: #2A3450;
+  --line-strong: #3A4560;
+
+  --gold-wash: #2A2410;
+  --gold-ink: #F2C948;
+
+  --danger-wash: #3A1512;
+}
+
+@layer base {
+  html,
+  body {
+    background-color: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  *,
+  ::before,
+  ::after {
+    border-color: var(--line);
+  }
+
+  /* Focus ring — ouro 2px, offset 2px, sem transição. §7 / §13. */
+  :where(a, button, input, textarea, select, [role="button"], [tabindex]):focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+    border-radius: 2px;
+    transition: none;
+  }
+
+  /* Todo metadado em mono. Aplicado por utilitário .meta na spec. */
+  ::selection {
+    background: var(--gold-wash);
+    color: var(--ink);
+  }
+}
+
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+
+@utility meta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+@utility meta-11 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 14px;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+@utility shadow-float {
+  box-shadow: var(--shadow-float);
+}
+
+/*
+ * prefers-reduced-motion:
+ * durações vão a 0, exceto fades de opacidade que caem para 80ms.
+ * §5.4. Requisito, não polimento.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  [data-motion="fade"] {
+    transition-duration: 80ms !important;
+  }
+}
+
+/*
+ * Flash de ouro no drop do kanban — 700ms, um único pulso.
+ */
+@keyframes kanbanFlash {
+  0% { background-color: var(--gold-wash); }
+  100% { background-color: var(--canvas); }
+}
+.kanban-flash {
+  animation: kanbanFlash 700ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+/*
+ * Entradas: fade + subida curta. Usado em listas, painéis, cards.
+ */
+@keyframes hubFadeInUp {
+  0% { opacity: 0; transform: translateY(4px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes hubFadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes hubScaleIn {
+  0% { opacity: 0; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.anim-fade-in-up { animation: hubFadeInUp 220ms cubic-bezier(0.2, 0, 0, 1) both; }
+.anim-fade-in { animation: hubFadeIn 180ms cubic-bezier(0.2, 0, 0, 1) both; }
+.anim-scale-in { animation: hubScaleIn 180ms cubic-bezier(0.2, 0, 0, 1) both; }
+
+/*
+ * Stagger: cada filho entra com um pequeno atraso incremental.
+ */
+.stagger > * {
+  animation: hubFadeInUp 260ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+.stagger > *:nth-child(1)  { animation-delay: 0ms; }
+.stagger > *:nth-child(2)  { animation-delay: 24ms; }
+.stagger > *:nth-child(3)  { animation-delay: 48ms; }
+.stagger > *:nth-child(4)  { animation-delay: 72ms; }
+.stagger > *:nth-child(5)  { animation-delay: 96ms; }
+.stagger > *:nth-child(6)  { animation-delay: 120ms; }
+.stagger > *:nth-child(7)  { animation-delay: 140ms; }
+.stagger > *:nth-child(8)  { animation-delay: 160ms; }
+.stagger > *:nth-child(9)  { animation-delay: 176ms; }
+.stagger > *:nth-child(10) { animation-delay: 192ms; }
+.stagger > *:nth-child(11) { animation-delay: 208ms; }
+.stagger > *:nth-child(12) { animation-delay: 220ms; }
+.stagger > *:nth-child(n+13) { animation-delay: 232ms; }
+
+/*
+ * Press: leve encolhida no clique.
+ */
+.press { transition: transform 120ms cubic-bezier(0.2, 0, 0, 1); }
+.press:active { transform: scale(0.97); }
+
+/*
+ * Estrela de favorito — cintilação suave.
+ * Pulso de opacidade + micro-escala + leve rotação, respeitando reduced-motion.
+ */
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.85; transform: scale(1) rotate(0deg); }
+  50%      { opacity: 1;    transform: scale(1.15) rotate(6deg); }
+}
+.star-twinkle {
+  animation: starTwinkle 2.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  transform-origin: center;
+  filter: drop-shadow(0 0 2px rgba(234, 180, 9, 0.35));
+}
+@media (prefers-reduced-motion: reduce) {
+  .star-twinkle { animation: none !important; }
+}
+
+/*
+ * Skeleton: linha/bloco cinza com pulso curto de opacidade.
+ * Duração casa com a transição de conteúdo (~160ms in / out).
+ */
+@keyframes hubSkeletonPulse {
+  0%   { opacity: 0.55; }
+  50%  { opacity: 0.9; }
+  100% { opacity: 0.55; }
+}
+.skeleton {
+  background-color: var(--raise);
+  border-radius: 4px;
+  animation: hubSkeletonPulse 1100ms cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/*
+ * Neon dot — verde neon estático com halo suave.
+ * Usado como indicador antes de eyebrows como "Continuar".
+ */
+.dot-neon {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background-color: #39ff94;
+  box-shadow:
+    0 0 4px 0 rgba(57, 255, 148, 0.5),
+    0 0 8px 1px rgba(57, 255, 148, 0.2);
+  flex-shrink: 0;
+}
+
+/*
+ * Card hover: contorno reforçado ao passar o mouse.
+ */
+.card-hover {
+  border: 1px solid var(--line);
+  transition:
+    border-color 160ms cubic-bezier(0.2, 0, 0, 1),
+    background-color 160ms cubic-bezier(0.2, 0, 0, 1),
+    box-shadow 160ms cubic-bezier(0.2, 0, 0, 1);
+}
+.card-hover:hover {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 1px var(--gold) inset;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stagger > *,
+  .anim-fade-in-up,
+  .anim-fade-in,
+  .anim-scale-in,
+  .kanban-flash,
+  .skeleton {
+    animation: none !important;
+  }
+  .skeleton { opacity: 0.7; }
+  .press:active { transform: none; }
+}
+
+/*
+ * Pin arrow — seta dourada indicando recurso fixado ao topo.
+ * Bobbing suave e halo dourado pulsante.
+ */
+@keyframes pinArrowBob {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(2px); }
+}
+@keyframes pinArrowGlow {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(234, 180, 9, 0)); }
+  50%      { filter: drop-shadow(0 0 3px rgba(234, 180, 9, 0.65)); }
+}
+@keyframes pinArrowEnter {
+  0%   { opacity: 0; transform: translateX(-6px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+.pin-arrow {
+  color: var(--gold);
+  animation:
+    pinArrowEnter 0.35s cubic-bezier(0.22, 1, 0.36, 1) both,
+    pinArrowBob 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite 0.35s,
+    pinArrowGlow 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite 0.35s;
+  transform-origin: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pin-arrow { animation: none !important; }
+}
