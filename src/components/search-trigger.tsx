@@ -21,9 +21,6 @@ export function SearchTrigger({ onOpen }: { onOpen: () => void }) {
       <span className="flex-1 text-[13px] text-ink-faint">
         Buscar recursos, ideias, tarefas
       </span>
-      <span className="meta-11 inline-flex items-center gap-0.5 rounded-[4px] border border-line px-1.5 py-[1px] text-ink-muted">
-        ⌘K
-      </span>
     </button>
   );
 }

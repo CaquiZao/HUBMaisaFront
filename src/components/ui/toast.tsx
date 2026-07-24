@@ -17,8 +17,15 @@ type Toast = {
   variante?: "info" | "erro";
 };
 
+type ToastInput = {
+  titulo?: string;
+  mensagem?: string;
+  descricao?: string;
+  variante?: "info" | "erro";
+};
+
 type ToastCtx = {
-  push: (t: Omit<Toast, "id">) => void;
+  push: (t: ToastInput) => void;
 };
 
 const Ctx = createContext<ToastCtx | null>(null);
@@ -39,7 +46,16 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const push = useCallback<ToastCtx["push"]>(
     (t) => {
       const id = crypto.randomUUID();
-      setToasts((atual) => [...atual, { ...t, id }]);
+      const tituloFinal = t.titulo || t.mensagem || "";
+      setToasts((atual) => [
+        ...atual,
+        {
+          id,
+          titulo: tituloFinal,
+          descricao: t.descricao,
+          variante: t.variante,
+        },
+      ]);
       timers.current[id] = setTimeout(() => remover(id), 4000);
     },
     [remover],

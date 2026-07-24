@@ -12,7 +12,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export type DropdownItem =
-  | { tipo: "item"; label: string; onSelect: () => void; disabled?: boolean; atalho?: string }
+  | {
+      tipo: "item";
+      label: string;
+      onSelect: () => void;
+      disabled?: boolean;
+      atalho?: string;
+    }
   | { tipo: "separador" };
 
 /**
@@ -36,7 +42,9 @@ export function Dropdown({
 
   const itensSelecionaveis = itens
     .map((it, i) => ({ it, i }))
-    .filter(({ it }) => it.tipo === "item" && !("disabled" in it && it.disabled));
+    .filter(
+      ({ it }) => it.tipo === "item" && !("disabled" in it && it.disabled),
+    );
 
   useEffect(() => {
     if (!aberto) return;
@@ -50,7 +58,8 @@ export function Dropdown({
         e.preventDefault();
         setAtivo((a) => {
           const idx = itensSelecionaveis.findIndex(({ i }) => i === a);
-          const prox = itensSelecionaveis[(idx + 1) % itensSelecionaveis.length];
+          const prox =
+            itensSelecionaveis[(idx + 1) % itensSelecionaveis.length];
           return prox?.i ?? a;
         });
       }
@@ -59,7 +68,9 @@ export function Dropdown({
         setAtivo((a) => {
           const idx = itensSelecionaveis.findIndex(({ i }) => i === a);
           const prox =
-            itensSelecionaveis[(idx - 1 + itensSelecionaveis.length) % itensSelecionaveis.length];
+            itensSelecionaveis[
+              (idx - 1 + itensSelecionaveis.length) % itensSelecionaveis.length
+            ];
           return prox?.i ?? a;
         });
       }
@@ -97,19 +108,24 @@ export function Dropdown({
 
   if (!isValidElement(trigger)) return null;
 
-  const gatilho = cloneElement(trigger as ReactElement<Record<string, unknown>>, {
-    ref: (el: HTMLElement | null) => {
-      gatilhoRef.current = el;
+  const gatilho = cloneElement(
+    trigger as ReactElement<Record<string, unknown>>,
+    {
+      ref: (el: HTMLElement | null) => {
+        gatilhoRef.current = el;
+      },
+      "aria-haspopup": "menu",
+      "aria-expanded": aberto,
+      "aria-controls": aberto ? menuId : undefined,
+      onClick: (e: React.MouseEvent) => {
+        const original = (
+          trigger.props as { onClick?: (e: React.MouseEvent) => void }
+        ).onClick;
+        original?.(e);
+        setAberto((a) => !a);
+      },
     },
-    "aria-haspopup": "menu",
-    "aria-expanded": aberto,
-    "aria-controls": aberto ? menuId : undefined,
-    onClick: (e: React.MouseEvent) => {
-      const original = (trigger.props as { onClick?: (e: React.MouseEvent) => void }).onClick;
-      original?.(e);
-      setAberto((a) => !a);
-    },
-  });
+  );
 
   return (
     <div className="relative inline-block">
@@ -117,6 +133,7 @@ export function Dropdown({
       <AnimatePresence>
         {aberto ? (
           <motion.div
+            key="dropdown-menu"
             ref={menuRef}
             id={menuId}
             role="menu"

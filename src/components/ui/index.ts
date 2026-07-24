@@ -1,5 +1,5 @@
 export { Row } from "./row";
-export { Tag } from "./tag";
+export { Tag, useNomeCategoria } from "./tag";
 export { Avatar, AvatarStack } from "./avatar";
 export { StatusDot } from "./status-dot";
 export { EmptyState } from "./empty-state";

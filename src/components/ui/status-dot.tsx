@@ -16,7 +16,7 @@ export function StatusDot({
       <span
         aria-hidden="true"
         className={cn(
-          "inline-block h-2 w-2 rounded-full border border-line-strong bg-transparent",
+          "inline-block h-2.5 w-2.5 rounded-full bg-red-500",
           className,
         )}
       />
@@ -26,7 +26,10 @@ export function StatusDot({
     return (
       <span
         aria-hidden="true"
-        className={cn("inline-block h-2 w-2 rounded-full bg-gold", className)}
+        className={cn(
+          "inline-block h-2.5 w-2.5 rounded-full bg-amber-400",
+          className,
+        )}
       />
     );
   }
@@ -34,16 +37,19 @@ export function StatusDot({
     return (
       <span
         aria-hidden="true"
-        className={cn("inline-block h-2 w-2 rounded-full bg-navy", className)}
+        className={cn(
+          "inline-block h-2.5 w-2.5 rounded-full bg-blue-500",
+          className,
+        )}
       />
     );
   }
-  // validado — navy com check ouro 6px
+  // validado — verde brilhante
   return (
     <span
       aria-hidden="true"
       className={cn(
-        "relative inline-flex h-2 w-2 items-center justify-center rounded-full bg-navy",
+        "relative inline-flex h-2.5 w-2.5 items-center justify-center rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.7)]",
         className,
       )}
     >
@@ -57,8 +63,8 @@ export function StatusDot({
         <path
           d="M1 3.2 L2.4 4.5 L5 1.5"
           fill="none"
-          stroke="#EAB409"
-          strokeWidth="1"
+          stroke="#064E3B"
+          strokeWidth="1.2"
           strokeLinecap="round"
           strokeLinejoin="round"
         />

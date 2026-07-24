@@ -10,12 +10,10 @@ const base =
   "disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap";
 
 const variants: Record<Variant, string> = {
-  primary:
-    "bg-navy text-white hover:bg-navy-2 active:bg-navy-3",
+  primary: "bg-navy text-white hover:bg-navy-2 active:bg-navy-3",
   secondary:
     "bg-canvas text-ink border border-line hover:border-line-strong hover:bg-raise",
-  ghost:
-    "bg-transparent text-ink hover:bg-raise",
+  ghost: "bg-transparent text-ink hover:bg-raise",
   danger:
     "bg-canvas text-danger border border-line hover:bg-danger-wash hover:border-danger",
 };
@@ -30,16 +28,24 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: Size;
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { className, variant = "secondary", size = "md", type = "button", ...props },
-  ref,
-) {
-  return (
-    <button
-      ref={ref}
-      type={type}
-      className={cn(base, variants[variant], sizes[size], className)}
-      {...props}
-    />
-  );
-});
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  function Button(
+    {
+      className,
+      variant = "secondary",
+      size = "md",
+      type = "button",
+      ...props
+    },
+    ref,
+  ) {
+    return (
+      <button
+        ref={ref}
+        type={type}
+        className={cn(base, variants[variant], sizes[size], className)}
+        {...props}
+      />
+    );
+  },
+);

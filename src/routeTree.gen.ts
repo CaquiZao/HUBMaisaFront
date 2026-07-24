@@ -9,24 +9,25 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
-import { Route as AppKanbanRouteImport } from './routes/_app.kanban'
-import { Route as AppIdeiasRouteImport } from './routes/_app.ideias'
-import { Route as AppConfigRouteImport } from './routes/_app.config'
 import { Route as AppAcervoRouteImport } from './routes/_app.acervo'
+import { Route as AppAlertasRouteImport } from './routes/_app.alertas'
+import { Route as AppConfigRouteImport } from './routes/_app.config'
+import { Route as AppIdeiasRouteImport } from './routes/_app.ideias'
+import { Route as AppKanbanRouteImport } from './routes/_app.kanban'
 import { Route as AppAcervoIndexRouteImport } from './routes/_app.acervo.index'
-import { Route as AppAcervoMuralRouteImport } from './routes/_app.acervo.mural'
 import { Route as AppAcervoAtasRouteImport } from './routes/_app.acervo.atas'
+import { Route as AppAcervoMuralRouteImport } from './routes/_app.acervo.mural'
 
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppRoute = AppRouteImport.update({
-  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
@@ -34,14 +35,14 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
-const AppKanbanRoute = AppKanbanRouteImport.update({
-  id: '/kanban',
-  path: '/kanban',
+const AppAcervoRoute = AppAcervoRouteImport.update({
+  id: '/acervo',
+  path: '/acervo',
   getParentRoute: () => AppRoute,
 } as any)
-const AppIdeiasRoute = AppIdeiasRouteImport.update({
-  id: '/ideias',
-  path: '/ideias',
+const AppAlertasRoute = AppAlertasRouteImport.update({
+  id: '/alertas',
+  path: '/alertas',
   getParentRoute: () => AppRoute,
 } as any)
 const AppConfigRoute = AppConfigRouteImport.update({
@@ -49,9 +50,14 @@ const AppConfigRoute = AppConfigRouteImport.update({
   path: '/config',
   getParentRoute: () => AppRoute,
 } as any)
-const AppAcervoRoute = AppAcervoRouteImport.update({
-  id: '/acervo',
-  path: '/acervo',
+const AppIdeiasRoute = AppIdeiasRouteImport.update({
+  id: '/ideias',
+  path: '/ideias',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppKanbanRoute = AppKanbanRouteImport.update({
+  id: '/kanban',
+  path: '/kanban',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAcervoIndexRoute = AppAcervoIndexRouteImport.update({
@@ -59,14 +65,14 @@ const AppAcervoIndexRoute = AppAcervoIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppAcervoRoute,
 } as any)
-const AppAcervoMuralRoute = AppAcervoMuralRouteImport.update({
-  id: '/mural',
-  path: '/mural',
-  getParentRoute: () => AppAcervoRoute,
-} as any)
 const AppAcervoAtasRoute = AppAcervoAtasRouteImport.update({
   id: '/atas',
   path: '/atas',
+  getParentRoute: () => AppAcervoRoute,
+} as any)
+const AppAcervoMuralRoute = AppAcervoMuralRouteImport.update({
+  id: '/mural',
+  path: '/mural',
   getParentRoute: () => AppAcervoRoute,
 } as any)
 
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/login': typeof LoginRoute
   '/acervo': typeof AppAcervoRouteWithChildren
+  '/alertas': typeof AppAlertasRoute
   '/config': typeof AppConfigRoute
   '/ideias': typeof AppIdeiasRoute
   '/kanban': typeof AppKanbanRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
+  '/alertas': typeof AppAlertasRoute
   '/config': typeof AppConfigRoute
   '/ideias': typeof AppIdeiasRoute
   '/kanban': typeof AppKanbanRoute
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/_app/acervo': typeof AppAcervoRouteWithChildren
+  '/_app/alertas': typeof AppAlertasRoute
   '/_app/config': typeof AppConfigRoute
   '/_app/ideias': typeof AppIdeiasRoute
   '/_app/kanban': typeof AppKanbanRoute
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/acervo'
+    | '/alertas'
     | '/config'
     | '/ideias'
     | '/kanban'
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
+    | '/alertas'
     | '/config'
     | '/ideias'
     | '/kanban'
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
     | '/_app'
     | '/login'
     | '/_app/acervo'
+    | '/_app/alertas'
     | '/_app/config'
     | '/_app/ideias'
     | '/_app/kanban'
@@ -147,18 +159,18 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_app': {
       id: '/_app'
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app/': {
@@ -168,18 +180,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/kanban': {
-      id: '/_app/kanban'
-      path: '/kanban'
-      fullPath: '/kanban'
-      preLoaderRoute: typeof AppKanbanRouteImport
+    '/_app/acervo': {
+      id: '/_app/acervo'
+      path: '/acervo'
+      fullPath: '/acervo'
+      preLoaderRoute: typeof AppAcervoRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/ideias': {
-      id: '/_app/ideias'
-      path: '/ideias'
-      fullPath: '/ideias'
-      preLoaderRoute: typeof AppIdeiasRouteImport
+    '/_app/alertas': {
+      id: '/_app/alertas'
+      path: '/alertas'
+      fullPath: '/alertas'
+      preLoaderRoute: typeof AppAlertasRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/config': {
@@ -189,11 +201,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppConfigRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/acervo': {
-      id: '/_app/acervo'
-      path: '/acervo'
-      fullPath: '/acervo'
-      preLoaderRoute: typeof AppAcervoRouteImport
+    '/_app/ideias': {
+      id: '/_app/ideias'
+      path: '/ideias'
+      fullPath: '/ideias'
+      preLoaderRoute: typeof AppIdeiasRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/kanban': {
+      id: '/_app/kanban'
+      path: '/kanban'
+      fullPath: '/kanban'
+      preLoaderRoute: typeof AppKanbanRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/acervo/': {
@@ -203,18 +222,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAcervoIndexRouteImport
       parentRoute: typeof AppAcervoRoute
     }
-    '/_app/acervo/mural': {
-      id: '/_app/acervo/mural'
-      path: '/mural'
-      fullPath: '/acervo/mural'
-      preLoaderRoute: typeof AppAcervoMuralRouteImport
-      parentRoute: typeof AppAcervoRoute
-    }
     '/_app/acervo/atas': {
       id: '/_app/acervo/atas'
       path: '/atas'
       fullPath: '/acervo/atas'
       preLoaderRoute: typeof AppAcervoAtasRouteImport
+      parentRoute: typeof AppAcervoRoute
+    }
+    '/_app/acervo/mural': {
+      id: '/_app/acervo/mural'
+      path: '/mural'
+      fullPath: '/acervo/mural'
+      preLoaderRoute: typeof AppAcervoMuralRouteImport
       parentRoute: typeof AppAcervoRoute
     }
   }
@@ -238,6 +257,7 @@ const AppAcervoRouteWithChildren = AppAcervoRoute._addFileChildren(
 
 interface AppRouteChildren {
   AppAcervoRoute: typeof AppAcervoRouteWithChildren
+  AppAlertasRoute: typeof AppAlertasRoute
   AppConfigRoute: typeof AppConfigRoute
   AppIdeiasRoute: typeof AppIdeiasRoute
   AppKanbanRoute: typeof AppKanbanRoute
@@ -246,6 +266,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppAcervoRoute: AppAcervoRouteWithChildren,
+  AppAlertasRoute: AppAlertasRoute,
   AppConfigRoute: AppConfigRoute,
   AppIdeiasRoute: AppIdeiasRoute,
   AppKanbanRoute: AppKanbanRoute,
@@ -261,3 +282,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

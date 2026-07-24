@@ -15,7 +15,7 @@ export type Membro = {
  * "Ata", "PRD", "Post-mortem" etc. NÃO são tipos: são rótulos (`rotulo`)
  * aplicados sobre `arquivo` ou `link`.
  */
-export type TipoRecurso = 'arquivo' | 'link' | 'imagem';
+export type TipoRecurso = "arquivo" | "link" | "imagem";
 
 export type Recurso = {
   id: string;
@@ -34,11 +34,19 @@ export type Recurso = {
   url?: string;
   arquivo?: { nome: string; tamanho: number; mime: string; dataUrl?: string };
   ata?: { data: string; participantes: string[]; decisoes: string[] };
-  imagem?: { url: string; largura?: number; altura?: number; alt?: string; dataUrl?: string };
+  imagem?: {
+    url: string;
+    largura?: number;
+    altura?: number;
+    alt?: string;
+    dataUrl?: string;
+  };
   corpo?: string;
 };
 
-export type Coluna = 'planejado' | 'fazendo' | 'feito' | 'validado';
+export type Coluna = "planejado" | "fazendo" | "feito" | "validado";
+
+export type Prioridade = "baixa" | "media" | "alta";
 
 export type Card = {
   id: string;
@@ -48,11 +56,24 @@ export type Card = {
   ordem: number;
   categoria: Categoria;
   responsavelId?: string;
+  responsaveisIds?: string[];
   autorId: string;
   ideiaOrigemId?: string;
   criadoEm: string;
   atualizadoEm: string;
+  arquivado?: boolean;
+  prioridade?: Prioridade;
 };
+
+export type StatusIdeia =
+  | "nova"
+  | "em_discussao"
+  | "aprovada"
+  | "virou_task"
+  | "descartada"
+  | "aberta"
+  | "virou-card"
+  | "arquivada";
 
 export type Ideia = {
   id: string;
@@ -62,7 +83,7 @@ export type Ideia = {
   tags: string[];
   autorId: string;
   votos: string[];
-  status: 'aberta' | 'virou-card' | 'arquivada';
+  status: StatusIdeia;
   cardGeradoId?: string;
   criadaEm: string;
 };
@@ -78,8 +99,8 @@ export type Comentario = {
 export type Atividade = {
   id: string;
   autorId: string;
-  verbo: 'criou' | 'moveu' | 'comentou' | 'adicionou' | 'favoritou';
-  alvoTipo: 'recurso' | 'card' | 'ideia';
+  verbo: "criou" | "moveu" | "comentou" | "adicionou" | "favoritou";
+  alvoTipo: "recurso" | "card" | "ideia";
   alvoId: string;
   alvoTitulo: string;
   detalhe?: string;

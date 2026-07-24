@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useId,
-  useRef,
-  type ReactNode,
-} from "react";
+import { useCallback, useEffect, useId, useRef, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -35,6 +29,9 @@ export function Modal({
 }) {
   const painelRef = useRef<HTMLDivElement | null>(null);
   const returnFocusRef = useRef<HTMLElement | null>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+
   const tituloId = useId();
   const descricaoId = useId();
 
@@ -48,6 +45,19 @@ export function Modal({
     }
   }, [open]);
 
+  // Focar primeiro item focável do modal apenas ao abrir
+  useEffect(() => {
+    if (!open) return;
+    const painel = painelRef.current;
+    if (!painel) return;
+
+    // Apenas na primeira vez
+    const initial = painel.querySelector<HTMLElement>(FOCUSABLE);
+    if (initial && document.activeElement === document.body) {
+      initial.focus();
+    }
+  }, [open]);
+
   // Esc + focus trap
   useEffect(() => {
     if (!open) return;
@@ -55,14 +65,10 @@ export function Modal({
     const painel = painelRef.current;
     if (!painel) return;
 
-    // focar primeiro item focável do modal
-    const initial = painel.querySelector<HTMLElement>(FOCUSABLE);
-    initial?.focus();
-
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") {
         e.stopPropagation();
-        onClose();
+        onCloseRef.current();
         return;
       }
       if (e.key !== "Tab") return;
@@ -86,14 +92,17 @@ export function Modal({
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = overflowAntes;
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (typeof document === "undefined") return null;
 
   return createPortal(
     <AnimatePresence>
       {open ? (
-        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-6 sm:p-12">
+        <div
+          key="modal-container"
+          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-6 sm:p-12"
+        >
           <motion.div
             data-motion="fade"
             className="fixed inset-0 bg-[rgba(13,21,39,0.35)]"

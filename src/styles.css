@@ -42,29 +42,30 @@
   --color-ring: var(--gold);
 
   /* ------- tipografia ------- */
-  --font-sans: "Geist", "Inter", system-ui, -apple-system, sans-serif;
-  --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-sans: "Plus Jakarta Sans", "Geist", "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono:
+    "Geist Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
 
-  --text-meta: 11px;
-  --text-meta--line-height: 14px;
-  --text-meta--letter-spacing: 0.04em;
+  --text-meta: 12px;
+  --text-meta--line-height: 15px;
+  --text-meta--letter-spacing: 0.03em;
 
-  --text-caption: 12px;
-  --text-caption--line-height: 16px;
+  --text-caption: 13px;
+  --text-caption--line-height: 17px;
 
-  --text-body-sm: 13px;
-  --text-body-sm--line-height: 18px;
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 19px;
 
-  --text-body: 14px;
-  --text-body--line-height: 20px;
+  --text-body: 15px;
+  --text-body--line-height: 21px;
 
-  --text-title: 20px;
-  --text-title--line-height: 26px;
+  --text-title: 21px;
+  --text-title--line-height: 27px;
   --text-title--letter-spacing: -0.02em;
 
-  --text-display: 34px;
-  --text-display--line-height: 40px;
+  --text-display: 36px;
+  --text-display--line-height: 42px;
 
   /* ------- radius ------- */
   --radius-control: 6px;
@@ -76,31 +77,32 @@
 }
 
 :root {
-  --navy: #0D1527;
-  --navy-2: #161F33;
-  --navy-3: #1F2940;
-  --navy-4: #2A3450;
-  --navy-5: #3A4560;
+  --navy: #0d1527;
+  --navy-2: #161f33;
+  --navy-3: #1f2940;
+  --navy-4: #2a3450;
+  --navy-5: #3a4560;
 
-  --ink: #0D1527;
-  --ink-muted: #4A5468;
-  --ink-faint: #8892A4;
+  --ink: #0d1527;
+  --ink-muted: #4a5468;
+  --ink-faint: #8892a4;
 
-  --line: #E3E6EC;
-  --line-strong: #C9CFDA;
+  --line: #e3e6ec;
+  --line-strong: #c9cfda;
 
-  --canvas: #FFFFFF;
-  --raise: #F7F8FA;
+  --canvas: #ffffff;
+  --raise: #f7f8fa;
 
-  --gold: #EAB409;
-  --gold-hover: #D4A208;
-  --gold-wash: #FEF7E0;
-  --gold-ink: #6B5203;
+  --gold: #eab409;
+  --gold-hover: #d4a208;
+  --gold-wash: #fef7e0;
+  --gold-ink: #6b5203;
 
-  --danger: #B3261E;
-  --danger-wash: #FDECEA;
+  --danger: #b3261e;
+  --danger-wash: #fdecea;
 
-  --shadow-float: 0 8px 24px rgba(13, 21, 39, 0.10), 0 2px 6px rgba(13, 21, 39, 0.06);
+  --shadow-float:
+    0 8px 24px rgba(13, 21, 39, 0.1), 0 2px 6px rgba(13, 21, 39, 0.06);
 
   --dur-fast: 120ms;
   --dur-base: 160ms;
@@ -108,20 +110,20 @@
 }
 
 .dark {
-  --canvas: #0D1527;
-  --raise: #161F33;
+  --canvas: #0d1527;
+  --raise: #161f33;
 
-  --ink: #F2F4F8;
-  --ink-muted: #A8B0C0;
-  --ink-faint: #6C7690;
+  --ink: #f2f4f8;
+  --ink-muted: #a8b0c0;
+  --ink-faint: #6c7690;
 
-  --line: #2A3450;
-  --line-strong: #3A4560;
+  --line: #2a3450;
+  --line-strong: #3a4560;
 
-  --gold-wash: #2A2410;
-  --gold-ink: #F2C948;
+  --gold-wash: #2a2410;
+  --gold-ink: #f2c948;
 
-  --danger-wash: #3A1512;
+  --danger-wash: #3a1512;
 }
 
 @layer base {
@@ -136,8 +138,8 @@
   }
 
   body {
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 15px;
+    line-height: 21px;
   }
 
   *,
@@ -147,7 +149,15 @@
   }
 
   /* Focus ring — ouro 2px, offset 2px, sem transição. §7 / §13. */
-  :where(a, button, input, textarea, select, [role="button"], [tabindex]):focus-visible {
+  :where(
+    a,
+    button,
+    input,
+    textarea,
+    select,
+    [role="button"],
+    [tabindex]
+  ):focus-visible {
     outline: 2px solid var(--gold);
     outline-offset: 2px;
     border-radius: 2px;
@@ -215,8 +225,12 @@
  * Flash de ouro no drop do kanban — 700ms, um único pulso.
  */
 @keyframes kanbanFlash {
-  0% { background-color: var(--gold-wash); }
-  100% { background-color: var(--canvas); }
+  0% {
+    background-color: var(--gold-wash);
+  }
+  100% {
+    background-color: var(--canvas);
+  }
 }
 .kanban-flash {
   animation: kanbanFlash 700ms cubic-bezier(0.2, 0, 0, 1);
@@ -226,21 +240,43 @@
  * Entradas: fade + subida curta. Usado em listas, painéis, cards.
  */
 @keyframes hubFadeInUp {
-  0% { opacity: 0; transform: translateY(4px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @keyframes hubFadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 @keyframes hubScaleIn {
-  0% { opacity: 0; transform: scale(0.98); }
-  100% { opacity: 1; transform: scale(1); }
+  0% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-.anim-fade-in-up { animation: hubFadeInUp 220ms cubic-bezier(0.2, 0, 0, 1) both; }
-.anim-fade-in { animation: hubFadeIn 180ms cubic-bezier(0.2, 0, 0, 1) both; }
-.anim-scale-in { animation: hubScaleIn 180ms cubic-bezier(0.2, 0, 0, 1) both; }
+.anim-fade-in-up {
+  animation: hubFadeInUp 220ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+.anim-fade-in {
+  animation: hubFadeIn 180ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+.anim-scale-in {
+  animation: hubScaleIn 180ms cubic-bezier(0.2, 0, 0, 1) both;
+}
 
 /*
  * Stagger: cada filho entra com um pequeno atraso incremental.
@@ -248,33 +284,70 @@
 .stagger > * {
   animation: hubFadeInUp 260ms cubic-bezier(0.2, 0, 0, 1) both;
 }
-.stagger > *:nth-child(1)  { animation-delay: 0ms; }
-.stagger > *:nth-child(2)  { animation-delay: 24ms; }
-.stagger > *:nth-child(3)  { animation-delay: 48ms; }
-.stagger > *:nth-child(4)  { animation-delay: 72ms; }
-.stagger > *:nth-child(5)  { animation-delay: 96ms; }
-.stagger > *:nth-child(6)  { animation-delay: 120ms; }
-.stagger > *:nth-child(7)  { animation-delay: 140ms; }
-.stagger > *:nth-child(8)  { animation-delay: 160ms; }
-.stagger > *:nth-child(9)  { animation-delay: 176ms; }
-.stagger > *:nth-child(10) { animation-delay: 192ms; }
-.stagger > *:nth-child(11) { animation-delay: 208ms; }
-.stagger > *:nth-child(12) { animation-delay: 220ms; }
-.stagger > *:nth-child(n+13) { animation-delay: 232ms; }
+.stagger > *:nth-child(1) {
+  animation-delay: 0ms;
+}
+.stagger > *:nth-child(2) {
+  animation-delay: 24ms;
+}
+.stagger > *:nth-child(3) {
+  animation-delay: 48ms;
+}
+.stagger > *:nth-child(4) {
+  animation-delay: 72ms;
+}
+.stagger > *:nth-child(5) {
+  animation-delay: 96ms;
+}
+.stagger > *:nth-child(6) {
+  animation-delay: 120ms;
+}
+.stagger > *:nth-child(7) {
+  animation-delay: 140ms;
+}
+.stagger > *:nth-child(8) {
+  animation-delay: 160ms;
+}
+.stagger > *:nth-child(9) {
+  animation-delay: 176ms;
+}
+.stagger > *:nth-child(10) {
+  animation-delay: 192ms;
+}
+.stagger > *:nth-child(11) {
+  animation-delay: 208ms;
+}
+.stagger > *:nth-child(12) {
+  animation-delay: 220ms;
+}
+.stagger > *:nth-child(n + 13) {
+  animation-delay: 232ms;
+}
 
 /*
  * Press: leve encolhida no clique.
  */
-.press { transition: transform 120ms cubic-bezier(0.2, 0, 0, 1); }
-.press:active { transform: scale(0.97); }
+.press {
+  transition: transform 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+.press:active {
+  transform: scale(0.97);
+}
 
 /*
  * Estrela de favorito — cintilação suave.
  * Pulso de opacidade + micro-escala + leve rotação, respeitando reduced-motion.
  */
 @keyframes starTwinkle {
-  0%, 100% { opacity: 0.85; transform: scale(1) rotate(0deg); }
-  50%      { opacity: 1;    transform: scale(1.15) rotate(6deg); }
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15) rotate(6deg);
+  }
 }
 .star-twinkle {
   animation: starTwinkle 2.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -282,7 +355,9 @@
   filter: drop-shadow(0 0 2px rgba(234, 180, 9, 0.35));
 }
 @media (prefers-reduced-motion: reduce) {
-  .star-twinkle { animation: none !important; }
+  .star-twinkle {
+    animation: none !important;
+  }
 }
 
 /*
@@ -290,9 +365,15 @@
  * Duração casa com a transição de conteúdo (~160ms in / out).
  */
 @keyframes hubSkeletonPulse {
-  0%   { opacity: 0.55; }
-  50%  { opacity: 0.9; }
-  100% { opacity: 0.55; }
+  0% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.55;
+  }
 }
 .skeleton {
   background-color: var(--raise);
@@ -340,8 +421,12 @@
   .skeleton {
     animation: none !important;
   }
-  .skeleton { opacity: 0.7; }
-  .press:active { transform: none; }
+  .skeleton {
+    opacity: 0.7;
+  }
+  .press:active {
+    transform: none;
+  }
 }
 
 /*
@@ -349,16 +434,32 @@
  * Bobbing suave e halo dourado pulsante.
  */
 @keyframes pinArrowBob {
-  0%, 100% { transform: translateX(0); }
-  50%      { transform: translateX(2px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(2px);
+  }
 }
 @keyframes pinArrowGlow {
-  0%, 100% { filter: drop-shadow(0 0 0 rgba(234, 180, 9, 0)); }
-  50%      { filter: drop-shadow(0 0 3px rgba(234, 180, 9, 0.65)); }
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 rgba(234, 180, 9, 0));
+  }
+  50% {
+    filter: drop-shadow(0 0 3px rgba(234, 180, 9, 0.65));
+  }
 }
 @keyframes pinArrowEnter {
-  0%   { opacity: 0; transform: translateX(-6px); }
-  100% { opacity: 1; transform: translateX(0); }
+  0% {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 .pin-arrow {
   color: var(--gold);
@@ -369,5 +470,224 @@
   transform-origin: center;
 }
 @media (prefers-reduced-motion: reduce) {
-  .pin-arrow { animation: none !important; }
+  .pin-arrow {
+    animation: none !important;
+  }
+}
+
+/* From Uiverse.io by cybrejon */
+.Btn {
+  color: rgba(0, 0, 0, 0.692);
+  padding: 10px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-shadow: 0 0 20px rgba(0, 0, 0, 0.197);
+  background: rgba(0, 0, 0, 0.068);
+  overflow: hidden;
+  font-size: 0.9rem;
+  font-weight: 600;
+  gap: 8px;
+  border-radius: 5px;
+  transition: 0.2s;
+  border: 1px solid transparent;
+  width: 100%;
+  cursor: pointer;
+}
+
+.Btn:hover {
+  border-color: rgba(0, 0, 0, 0.623);
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.05),
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0.15)
+  );
+  box-shadow: 0 6px rgba(0, 0, 0, 0.623);
+  transform: translateY(-6px);
+}
+
+.Btn:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+.ShortcutCard {
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(to right,#77530a,#ffd277,#77530a,#77530a,#ffd277,#77530a);
+  background-size: 250%;
+  background-position: left;
+  color: #ffd277;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition-duration: 1s;
+  overflow: hidden;
+}
+.ShortcutCard::before {
+  position: absolute;
+  content: "";
+  color: #ffd277;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  top: 2px;
+  left: 2px;
+  border-radius: 8px;
+  transition-duration: 1s;
+  background-color: rgba(0, 0, 0, 0.842);
+  background-size: 200%;
+}
+.ShortcutCard:hover {
+  background-position: right;
+  transition-duration: 1s;
+}
+.ShortcutCard:hover::before {
+  background-position: right;
+  transition-duration: 1s;
+}
+
+/* Focus mode style change */
+div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > h1:nth-of-type(1) {
+  display: none !important;
+}
+
+/* From Uiverse.io by Nawsome */ 
+.switch {
+  display: block;
+  background-color: black;
+  width: 150px;
+  height: 195px;
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.2), 0 0 1px 2px black, inset 0 2px 2px -2px white, inset 0 0 2px 15px #47434c, inset 0 0 2px 22px black;
+  border-radius: 5px;
+  padding: 20px;
+  perspective: 700px;
+}
+
+.switch input {
+  display: none;
+}
+
+.switch input:checked + .button {
+  transform: translateZ(20px) rotateX(25deg);
+  box-shadow: 0 -10px 20px #ff1818;
+}
+
+.switch input:checked + .button .light {
+  animation: flicker 0.2s infinite 0.3s;
+}
+
+.switch input:checked + .button .shine {
+  opacity: 1;
+}
+
+.switch input:checked + .button .shadow {
+  opacity: 0;
+}
+
+.switch .button {
+  display: block;
+  transition: all 0.3s cubic-bezier(1, 0, 1, 1);
+  transform-origin: center center -20px;
+  transform: translateZ(20px) rotateX(-25deg);
+  transform-style: preserve-3d;
+  background-color: #9b0621;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+  background: linear-gradient(#980000 0%, #6f0000 30%, #6f0000 70%, #980000 100%);
+  background-repeat: no-repeat;
+}
+
+.switch .button::before {
+  content: "";
+  background: linear-gradient(rgba(255, 255, 255, 0.8) 10%, rgba(255, 255, 255, 0.3) 30%, #650000 75%, #320000) 50% 50%/97% 97%, #b10000;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 50px;
+  transform-origin: top;
+  transform: rotateX(-90deg);
+  position: absolute;
+  top: 0;
+}
+
+.switch .button::after {
+  content: "";
+  background-image: linear-gradient(#650000, #320000);
+  width: 100%;
+  height: 50px;
+  transform-origin: top;
+  transform: translateY(50px) rotateX(-90deg);
+  position: absolute;
+  bottom: 0;
+  box-shadow: 0 50px 8px 0px black, 0 80px 20px 0px rgba(0, 0, 0, 0.5);
+}
+
+.switch .light {
+  opacity: 0;
+  animation: light-off 1s;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(#ffc97e, #ff1818 40%, transparent 70%);
+}
+
+.switch .dots {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(transparent 30%, rgba(101, 0, 0, 0.7) 70%);
+  background-size: 10px 10px;
+}
+
+.switch .characters {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(white, white) 50% 20%/5% 20%, radial-gradient(circle, transparent 50%, white 52%, white 70%, transparent 72%) 50% 80%/33% 25%;
+  background-repeat: no-repeat;
+}
+
+.switch .shine {
+  transition: all 0.3s cubic-bezier(1, 0, 1, 1);
+  opacity: 0.3;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(white, transparent 3%) 50% 50%/97% 97%, linear-gradient(rgba(255, 255, 255, 0.5), transparent 50%, transparent 80%, rgba(255, 255, 255, 0.5)) 50% 50%/97% 97%;
+  background-repeat: no-repeat;
+}
+
+.switch .shadow {
+  transition: all 0.3s cubic-bezier(1, 0, 1, 1);
+  opacity: 1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(transparent 70%, rgba(0, 0, 0, 0.8));
+  background-repeat: no-repeat;
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes light-off {
+  0% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 0;
+  }
 }

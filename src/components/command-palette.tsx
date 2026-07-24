@@ -3,7 +3,10 @@ import { createPortal } from "react-dom";
 import { Command } from "cmdk";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "@tanstack/react-router";
-import { recursos, cards, ideias, membros } from "@/mocks";
+import { useIdeias } from "@/lib/ideias-store";
+import { useRecursosLista } from "@/lib/recursos-store";
+import { useCardsState } from "@/lib/cards-store";
+import { useMembros } from "@/lib/membros-store";
 import { useToast } from "@/components/ui";
 
 type Item = {
@@ -11,6 +14,7 @@ type Item = {
   grupo: "Recursos" | "Cards" | "Ideias" | "Membros";
   titulo: string;
   meta?: string;
+  busca: string;
   onSelect: () => void;
 };
 
@@ -28,6 +32,11 @@ export function CommandPalette({
   const inputRef = useRef<HTMLInputElement>(null);
   const [selectedValue, setSelectedValue] = useState("");
 
+  const recursos = useRecursosLista();
+  const cards = useCardsState();
+  const ideias = useIdeias();
+  const membros = useMembros();
+
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
@@ -35,18 +44,21 @@ export function CommandPalette({
   }, [open]);
 
   const items = useMemo<Item[]>(() => {
-    const rec = recursos.slice(0, 40).map<Item>((r) => ({
+    const rec = recursos.map<Item>((r) => ({
       id: `rec-${r.id}`,
       grupo: "Recursos",
       titulo: r.titulo,
       meta: r.tipo,
-      onSelect: () => navigate({ to: "/acervo", search: { id: r.id } as never }),
+      busca: `rec-${r.id} Recursos ${r.titulo} ${r.descricao || ""} ${r.tipo} ${r.rotulo || ""} ${r.categoria || ""}`,
+      onSelect: () =>
+        navigate({ to: "/acervo", search: { id: r.id } as never }),
     }));
     const crd = cards.map<Item>((c) => ({
       id: `card-${c.id}`,
       grupo: "Cards",
       titulo: c.titulo,
       meta: c.coluna,
+      busca: `card-${c.id} Cards ${c.titulo} ${c.descricao || ""} ${c.categoria || ""} ${c.autorId || ""} ${c.responsaveisIds?.join(" ") || ""}`,
       onSelect: () => navigate({ to: "/kanban" }),
     }));
     const ide = ideias.map<Item>((i) => ({
@@ -54,24 +66,29 @@ export function CommandPalette({
       grupo: "Ideias",
       titulo: i.titulo,
       meta: `${i.votos.length} votos`,
+      busca: `ide-${i.id} Ideias ${i.titulo} ${i.corpo || ""} ${i.categoria || ""} ${i.autorId || ""}`,
       onSelect: () => navigate({ to: "/ideias" }),
     }));
     const mem = membros.map<Item>((m) => ({
       id: `mem-${m.id}`,
       grupo: "Membros",
       titulo: m.nome,
+      busca: `mem-${m.id} Membros ${m.nome}`,
       onSelect: () => navigate({ to: "/config" }),
     }));
     return [...rec, ...crd, ...ide, ...mem];
-  }, [navigate]);
+  }, [navigate, recursos, cards, ideias, membros]);
 
   const grupos: Item["grupo"][] = ["Recursos", "Cards", "Ideias", "Membros"];
   const hasQuery = query.trim().length > 0;
 
   const filtroTem = useMemo(() => {
     if (!hasQuery) return true;
-    const q = query.toLowerCase();
-    return items.some((it) => it.titulo.toLowerCase().includes(q));
+    const searchWords = query.toLowerCase().split(/\s+/).filter(Boolean);
+    return items.some((it) => {
+      const textToSearch = it.busca.toLowerCase();
+      return searchWords.every((word) => textToSearch.includes(word));
+    });
   }, [hasQuery, items, query]);
 
   function fechar() {
@@ -126,6 +143,17 @@ export function CommandPalette({
               value={selectedValue}
               onValueChange={setSelectedValue}
               shouldFilter
+              filter={(value, search) => {
+                if (!search) return 1;
+                const searchWords = search
+                  .toLowerCase()
+                  .split(/\s+/)
+                  .filter(Boolean);
+                const textToSearch = value.toLowerCase();
+                return searchWords.every((word) => textToSearch.includes(word))
+                  ? 1
+                  : 0;
+              }}
             >
               <div className="border-b border-line px-3">
                 <Command.Input
@@ -172,12 +200,11 @@ export function CommandPalette({
                           .map((it) => (
                             <Command.Item
                               key={it.id}
-                              value={`${it.grupo} ${it.titulo}`}
+                              value={it.busca}
                               onSelect={() => selecionar(it.onSelect)}
                               className="group relative flex cursor-pointer items-center gap-2 rounded-[6px] px-2.5 py-1.5 text-[13px] text-ink data-[selected=true]:bg-raise"
                             >
-                              {selectedValue ===
-                              `${it.grupo} ${it.titulo}` ? (
+                              {selectedValue === it.busca ? (
                                 <motion.span
                                   layoutId="active-bar"
                                   className="absolute left-0 top-1/2 h-4 w-[2px] -translate-y-1/2 rounded-full bg-gold"
@@ -241,25 +268,10 @@ export function useHubShortcuts(
   paletteOpen: boolean,
   setPaletteOpen: (v: boolean) => void,
 ) {
-  const navigate = useNavigate();
-
   useEffect(() => {
-    let leaderTimer: number | null = null;
-    let leaderAtivo = false;
-
-    function estaEmCampo(el: EventTarget | null): boolean {
-      if (!(el instanceof HTMLElement)) return false;
-      const tag = el.tagName;
-      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT")
-        return true;
-      if (el.isContentEditable) return true;
-      return false;
-    }
-
     function onKey(e: KeyboardEvent) {
       const meta = e.metaKey || e.ctrlKey;
 
-      // ⌘K sempre válido, mesmo em input
       if (meta && (e.key === "k" || e.key === "K")) {
         e.preventDefault();
         setPaletteOpen(!paletteOpen);
@@ -271,52 +283,11 @@ export function useHubShortcuts(
         setPaletteOpen(false);
         return;
       }
-
-      // Demais atalhos: só fora de campo e sem palette aberto
-      if (estaEmCampo(e.target)) return;
-      if (paletteOpen) return;
-      if (meta || e.altKey) return;
-
-      if (leaderAtivo) {
-        leaderAtivo = false;
-        if (leaderTimer) window.clearTimeout(leaderTimer);
-        const k = e.key.toLowerCase();
-        if (k === "i") {
-          e.preventDefault();
-          navigate({ to: "/ideias" });
-        } else if (k === "a") {
-          e.preventDefault();
-          navigate({ to: "/acervo" });
-        } else if (k === "k") {
-          e.preventDefault();
-          navigate({ to: "/kanban" });
-        } else if (k === "d") {
-          e.preventDefault();
-          navigate({ to: "/" });
-        }
-        return;
-      }
-
-      if (e.key === "g" || e.key === "G") {
-        e.preventDefault();
-        leaderAtivo = true;
-        leaderTimer = window.setTimeout(() => {
-          leaderAtivo = false;
-        }, 1200);
-        return;
-      }
-
-      if (e.key === "/" || e.key === "c" || e.key === "C") {
-        e.preventDefault();
-        setPaletteOpen(true);
-        return;
-      }
     }
 
     window.addEventListener("keydown", onKey);
     return () => {
       window.removeEventListener("keydown", onKey);
-      if (leaderTimer) window.clearTimeout(leaderTimer);
     };
-  }, [navigate, paletteOpen, setPaletteOpen]);
+  }, [paletteOpen, setPaletteOpen]);
 }

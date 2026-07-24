@@ -3,6 +3,7 @@ import { z } from "zod";
 import { PaginaAcervo } from "@/components/acervo/pagina";
 
 const search = z.object({
+  q: z.string().optional(),
   cat: z.string().optional(),
   fav: z.union([z.literal(1), z.literal(0)]).optional(),
   sort: z.enum(["recente", "titulo"]).optional(),
